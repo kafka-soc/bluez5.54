@@ -1,0 +1,8 @@
+GPATH
+GRTAGS
+GTAGS
+build/
+bin/
+lib/cups/
+libexec/
+

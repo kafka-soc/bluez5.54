@@ -92,7 +92,7 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 bin_PROGRAMS = $(am__EXEEXT_1) $(am__EXEEXT_2) $(am__EXEEXT_3) \
-	$(am__EXEEXT_4) $(am__EXEEXT_5)
+	$(am__EXEEXT_4) $(am__EXEEXT_5) $(am__EXEEXT_20)
 noinst_PROGRAMS = $(am__EXEEXT_6) $(am__EXEEXT_7) $(am__EXEEXT_8) \
 	$(am__EXEEXT_9) $(am__EXEEXT_10) $(am__EXEEXT_11) \
 	$(am__EXEEXT_16)
@@ -166,6 +166,7 @@ pkglibexec_PROGRAMS = src/bluetoothd$(EXEEXT) $(am__EXEEXT_17) \
 @SIXAXIS_TRUE@am__append_27 = plugins/sixaxis.la
 @MAINTAINER_MODE_TRUE@am__append_28 = plugins/external-dummy.la
 @CLIENT_TRUE@am__append_29 = client/bluetoothctl
+@CLIENT_TRUE@am__append_66 = client/pbap-cli
 @MONITOR_TRUE@am__append_30 = monitor/btmon
 @LOGGER_TRUE@am__append_31 = tools/btmon-logger
 @LOGGER_TRUE@@SYSTEMD_TRUE@am__append_32 = tools/bluetooth-logger.service
@@ -262,6 +263,7 @@ CONFIG_HEADER = config.h
 CONFIG_CLEAN_FILES = src/bluetoothd.8 lib/bluez.pc
 CONFIG_CLEAN_VPATH_FILES =
 @CLIENT_TRUE@am__EXEEXT_1 = client/bluetoothctl$(EXEEXT)
+@CLIENT_TRUE@am__EXEEXT_20 = client/pbap_cli$(EXEEXT)
 @MONITOR_TRUE@am__EXEEXT_2 = monitor/btmon$(EXEEXT)
 @TOOLS_TRUE@am__EXEEXT_3 = tools/rctest$(EXEEXT) tools/l2test$(EXEEXT) \
 @TOOLS_TRUE@	tools/l2ping$(EXEEXT) tools/bccmd$(EXEEXT) \
@@ -865,6 +867,18 @@ am__client_bluetoothctl_SOURCES_DIST = client/main.c client/display.h \
 @CLIENT_TRUE@	client/gatt.$(OBJEXT)
 client_bluetoothctl_OBJECTS = $(am_client_bluetoothctl_OBJECTS)
 @CLIENT_TRUE@client_bluetoothctl_DEPENDENCIES =  \
+@CLIENT_TRUE@	gdbus/libgdbus-internal.la src/libshared-glib.la \
+@CLIENT_TRUE@	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
+am__client_pbap_cli_SOURCES_DIST = client/pbap_cli.c client/display.h \
+	client/display.c client/agent.h client/agent.c \
+	client/advertising.h client/advertising.c client/gatt.h \
+	client/gatt.c
+@CLIENT_TRUE@am_client_pbap_cli_OBJECTS = client/pbap_cli.$(OBJEXT) \
+@CLIENT_TRUE@	client/display.$(OBJEXT) client/agent.$(OBJEXT) \
+@CLIENT_TRUE@	client/advertising.$(OBJEXT) \
+@CLIENT_TRUE@	client/gatt.$(OBJEXT)
+client_pbap_cli_OBJECTS = $(am_client_pbap_cli_OBJECTS)
+@CLIENT_TRUE@client_pbap_cli_DEPENDENCIES =  \
 @CLIENT_TRUE@	gdbus/libgdbus-internal.la src/libshared-glib.la \
 @CLIENT_TRUE@	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
 am__emulator_b1ee_SOURCES_DIST = emulator/b1ee.c
@@ -2317,6 +2331,7 @@ SOURCES = $(android_audio_a2dp_default_la_SOURCES) \
 	$(android_ipc_tester_SOURCES) \
 	$(android_system_emulator_SOURCES) $(android_test_ipc_SOURCES) \
 	$(attrib_gatttool_SOURCES) $(client_bluetoothctl_SOURCES) \
+	$(attrib_gatttool_SOURCES) $(client_pbap_cli_SOURCES) \
 	$(emulator_b1ee_SOURCES) $(emulator_btvirt_SOURCES) \
 	$(emulator_hfp_SOURCES) $(mesh_bluetooth_meshd_SOURCES) \
 	$(monitor_btmon_SOURCES) $(obexd_src_obexd_SOURCES) \
@@ -2392,6 +2407,7 @@ DIST_SOURCES = $(am__android_audio_a2dp_default_la_SOURCES_DIST) \
 	$(am__android_test_ipc_SOURCES_DIST) \
 	$(am__attrib_gatttool_SOURCES_DIST) \
 	$(am__client_bluetoothctl_SOURCES_DIST) \
+	$(am__client_pbap_cli_SOURCES_DIST) \
 	$(am__emulator_b1ee_SOURCES_DIST) \
 	$(am__emulator_btvirt_SOURCES_DIST) \
 	$(am__emulator_hfp_SOURCES_DIST) \
@@ -3215,6 +3231,17 @@ unit_tests = $(am__append_54) unit/test-eir unit/test-uuid \
 
 @CLIENT_TRUE@client_bluetoothctl_LDADD = gdbus/libgdbus-internal.la src/libshared-glib.la \
 @CLIENT_TRUE@				$(GLIB_LIBS) $(DBUS_LIBS) -lreadline
+
+@CLIENT_TRUE@client_pbap_cli_SOURCES = client/pbap_cli.c \
+@CLIENT_TRUE@					client/display.h client/display.c \
+@CLIENT_TRUE@					client/agent.h client/agent.c \
+@CLIENT_TRUE@					client/advertising.h \
+@CLIENT_TRUE@					client/advertising.c \
+@CLIENT_TRUE@					client/gatt.h client/gatt.c
+
+@CLIENT_TRUE@client_pbap_cli_LDADD = gdbus/libgdbus-internal.la src/libshared-glib.la \
+@CLIENT_TRUE@				$(GLIB_LIBS) $(DBUS_LIBS) -lreadline
+
 
 @ZSH_COMPLETIONS_TRUE@zshcompletiondir = $(ZSH_COMPLETIONDIR)
 @ZSH_COMPLETIONS_TRUE@dist_zshcompletion_DATA = completion/zsh/_bluetoothctl
@@ -4921,6 +4948,12 @@ client/gatt.$(OBJEXT): client/$(am__dirstamp) \
 client/bluetoothctl$(EXEEXT): $(client_bluetoothctl_OBJECTS) $(client_bluetoothctl_DEPENDENCIES) $(EXTRA_client_bluetoothctl_DEPENDENCIES) client/$(am__dirstamp)
 	@rm -f client/bluetoothctl$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(client_bluetoothctl_OBJECTS) $(client_bluetoothctl_LDADD) $(LIBS)
+emulator/b1ee.$(OBJEXT): emulator/$(am__dirstamp) \
+	emulator/$(DEPDIR)/$(am__dirstamp)
+
+client/pbap_cli$(EXEEXT): $(client_pbap_cli_OBJECTS) $(client_pbap_cli_DEPENDENCIES) $(EXTRA_client_pbap_cli_DEPENDENCIES) client/$(am__dirstamp)
+	@rm -f client/pbap_cli$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(client_pbap_cli_OBJECTS) $(client_pbap_cli_LDADD) $(LIBS)
 emulator/b1ee.$(OBJEXT): emulator/$(am__dirstamp) \
 	emulator/$(DEPDIR)/$(am__dirstamp)
 
