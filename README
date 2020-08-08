@@ -1,3 +1,18 @@
+
+#Build
+
+~~~shell
+mkdir build
+
+cd build
+
+../configure --prefix=/home/kafka/code/bluez-5.54/build/usr --mandir=/home/kafka/code/bluez-5.54/build/usr/share/man --sysconfdir=/home/kafka/code/bluez-5.54/build/etc --localstatedir=/home/kafka/code/bluez-5.54/build/var  --enable-library --enable-static=yes --enable-shared=yes 
+
+make && make install
+~~~
+
+
+
 BlueZ - Bluetooth protocol stack for Linux
 ******************************************
 
