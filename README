@@ -6,11 +6,7 @@ mkdir build
 
 cd build
 
-<<<<<<< HEAD
 ../configure --prefix=/home/kafka/code/bluez-5.54/build/usr --mandir=/home/kafka/code/bluez-5.54/build/usr/share/man --sysconfdir=/home/kafka/code/bluez-5.54/build/etc --localstatedir=/home/kafka/code/bluez-5.54/build/var  --enable-library --enable-static=yes --enable-shared=yes 
-=======
-../configure --prefix=/home/kafka/code/bluez-5.54/build/usr --mandir=/home/kafka/code/bluez-5.54/build/usr/share/man --sysconfdir=//home/kafka/code/bluez-5.54/build/etc --localstatedir=/home/kafka/code/bluez-5.54/build/var  --enable-library --enable-static=yes --enable-shared=yes 
->>>>>>> origin/master
 
 make && make install
 ~~~
